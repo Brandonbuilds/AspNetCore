@@ -196,10 +196,12 @@ namespace Microsoft.AspNetCore.Hosting.Internal
 
         public IWebHostBuilder UseDefaultServiceProvider(Action<WebHostBuilderContext, ServiceProviderOptions> configure)
         {
-            _builder.UseDefaultServiceProvider((context, options) =>
+            _builder.UseServiceProviderFactory(context =>
             {
                 var webHostBuilderContext = GetWebHostBuilderContext(context);
+                var options = new ServiceProviderOptions();
                 configure(webHostBuilderContext, options);
+                return new DefaultServiceProviderFactory(options);
             });
 
             return this;
